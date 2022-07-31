@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Linq;
-using System.Text.Json;
 using HRMS.API.Models;
-using HRMS.Dal;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -27,7 +25,7 @@ namespace HRMS.API.Controllers
                 return NotFound();
             }
 
-            return Content(JsonSerializer.Serialize(user), "application/json");
+            return Content(Serialize(user), "application/json");
         }
 
         //.TemporalAll()
@@ -56,7 +54,7 @@ namespace HRMS.API.Controllers
                 return NotFound();
             }
 
-            return Content(JsonSerializer.Serialize(user), "application/json");
+            return Content(Serialize(user), "application/json");
         }
 
         //TemporalAsOf
@@ -88,7 +86,7 @@ namespace HRMS.API.Controllers
                 return NotFound();
             }
 
-            return Content(JsonSerializer.Serialize(user), "application/json");
+            return Content(Serialize(user), "application/json");
         }
 
         //TemporalBetween
@@ -121,7 +119,7 @@ namespace HRMS.API.Controllers
                 return NotFound();
             }
 
-            return Content(JsonSerializer.Serialize(user), "application/json");
+            return Content(Serialize(user), "application/json");
         }
 
         //TemporalContainedIn
@@ -154,7 +152,7 @@ namespace HRMS.API.Controllers
                 return NotFound();
             }
 
-            return Content(JsonSerializer.Serialize(user), "application/json");
+            return Content(Serialize(user), "application/json");
         }
 
         [HttpPut("{id}")]

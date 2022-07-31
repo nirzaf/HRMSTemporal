@@ -1,10 +1,11 @@
+global using HRMS.Dal;
+global using static System.Text.Json.JsonSerializer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
-using HRMS.Dal;
 using HRMS.Dal.Migrations.MsSql.Extensions;
 using Microsoft.EntityFrameworkCore;
 
