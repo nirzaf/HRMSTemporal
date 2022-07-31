@@ -1,0 +1,67 @@
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
+using Microsoft.OpenApi.Models;
+using HRMS.Dal;
+using HRMS.Dal.Migrations.MsSql.Extensions;
+using Microsoft.EntityFrameworkCore;
+
+namespace HRMS.API
+{
+    public class Startup
+    {
+        public Startup(IConfiguration configuration)
+        {
+            Configuration = configuration;
+        }
+
+        public IConfiguration Configuration { get; }
+
+        // This method gets called by the runtime. Use this method to add services to the container.
+        public void ConfigureServices(IServiceCollection services)
+        {
+
+            services.AddControllers();
+            services.RegisterMsSqlDbSpecificProvider();
+            services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("v1", new OpenApiInfo { Title = "HRMS.API", Version = "v1" });
+            });
+            var connectionString = Configuration.GetConnectionString("Hrms");
+            services.AddDbContext<HrmsDbContext>(builder =>
+            {
+                builder.UseSqlServer(connectionString, options =>
+                    {
+                        options.MigrationsAssembly("HRMS.Dal.Migrations.MsSql");
+                    })
+                    .EnableDetailedErrors()
+                    //REMOVE WHEN MOVING OUT OF DEV
+                    .EnableSensitiveDataLogging();
+            });
+        }
+
+        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        {
+            if (env.IsDevelopment())
+            {
+                app.UseDeveloperExceptionPage();
+                app.UseSwagger();
+                app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "HRMS.API v1"));
+            }
+
+            app.UseHttpsRedirection();
+
+            app.UseRouting();
+
+            app.UseAuthorization();
+
+            app.UseEndpoints(endpoints =>
+            {
+                endpoints.MapControllers();
+            });
+        }
+    }
+}
